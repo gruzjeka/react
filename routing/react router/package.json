@@ -1,0 +1,25 @@
+{
+  "name": "react-router",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "./node_modules/.bin/webpack -w",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "babel-core": "6.18.2",
+    "babel-loader": "6.4.1",
+    "babel-preset-react": "6.5.0",
+    "history": "2.1.2",
+    "react": "15.5.4",
+    "react-dom": "15.5.4",
+    "react-router": "2.6.0",
+    "webpack": "2.4.1"
+  },
+  "devDependencies": {
+    "prop-types": "^15.7.2"
+  }
+}
