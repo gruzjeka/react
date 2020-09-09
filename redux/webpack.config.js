@@ -3,30 +3,26 @@ const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
   entry: {
-    index: ["babel-polyfill", "./src/index.js"],
+    index: ["babel-polyfill", "./client/index.js"],
   },
   output: {
-    path: path.join(__dirname, "build"),
+    path: path.join(__dirname, "build", "public"),
     filename: "[name].js",
   },
   target: "web",
   devServer: {
-    port: 9123,
+    port: 9898,
   },
   module: {
     loaders: [
       {
         loader: "babel-loader",
-        include: [path.resolve(__dirname, "src")],
+        include: [path.resolve(__dirname, "client")],
         exclude: /node_modules/,
         test: /\.js$/,
         query: {
           presets: ["react", "es2015", "stage-0"],
         },
-      },
-      {
-        loader: "json-loader",
-        test: /\.json$/,
       },
       {
         loader: ExtractTextPlugin.extract(
@@ -39,7 +35,7 @@ module.exports = {
     ],
   },
   resolve: {
-    modulesDirectories: ["./node_modules", "./src"],
+    modulesDirectories: ["./node_modules", "./client"],
   },
   plugins: [new ExtractTextPlugin("styles.css")],
 };

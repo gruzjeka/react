@@ -1,20 +1,28 @@
 const React = require("react");
-const { Link } = require("react-router");
 const { connect } = require("react-redux");
+const { Link } = require("react-router");
+const axios = require("axios");
+const clean = require("clean-tagged-string").default;
 const { fetchMoviesActionCreator } = require("../../reducers/movies");
 const styles = require("./movies.css");
 
 class Movies extends React.Component {
-  componentDidMount() {
-    fetch("/src/movies.json", { method: "GET" })
-      .then((response) => response.json())
-      .then((movies) => {
-        this.props.fetchMovies(movies);
-      });
+  componentWillMount() {
+    const query = clean`{
+      movies {
+        title,
+        cover
+      }
+    }`;
+
+    axios.get(`/q?query=${query}`).then((response) => {
+      this.props.dispatchFetchMovies(response);
+    });
   }
 
   render() {
-    const { children, movies = [], params } = this.props;
+    const { children, movies = [], params = {} } = this.props;
+
     return (
       <div className={styles.movies}>
         <div className={params.id ? styles.listHidden : styles.list}>
@@ -33,11 +41,6 @@ class Movies extends React.Component {
   }
 }
 
-module.exports = connect(
-  ({ movies }) => ({
-    movies: movies.movies,
-  }),
-  {
-    fetchMovies: fetchMoviesActionCreator,
-  }
-)(Movies);
+module.exports = connect(({ movies }) => ({ movies: movies.all }), {
+  dispatchFetchMovies: fetchMoviesActionCreator,
+})(Movies);

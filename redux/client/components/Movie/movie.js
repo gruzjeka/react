@@ -1,18 +1,38 @@
 const React = require("react");
 const { connect } = require("react-redux");
 const { Link } = require("react-router");
+const axios = require("axios");
+const clean = require("clean-tagged-string").default;
 const { fetchMovieActionCreator } = require("../../reducers/movies");
+
 const styles = require("./movie.css");
 
 class Movie extends React.Component {
   componentWillMount() {
-    this.props.fetchMovie(this.props.params.id);
+    this.fetchMovie(this.props.params.id);
   }
 
-  componentWillUpdate(next) {
-    if (this.props.params.id !== next.params.id) {
-      this.props.fetchMovie(next.params.id);
+  componentWillUpdate(nextProps) {
+    if (this.props.params.id !== nextProps.params.id) {
+      this.fetchMovie(nextProps.params.id);
     }
+  }
+
+  fetchMovie(id = this.props.params.id) {
+    const query = clean`{
+      movie(index:${id}) {
+        title,
+        cover,
+        year,
+        starring {
+          name
+        }
+      }
+    }`;
+
+    axios.get(`/q/?query=${query}`).then((response) => {
+      this.props.dispatchFetchMovie(response);
+    });
   }
 
   render() {
@@ -29,6 +49,10 @@ class Movie extends React.Component {
           backgroundImage: `linear-gradient(90deg, rgba(0, 0, 0, 1) 0%, rgba(0, 0, 0, 0.625) 100%), url(${movie.cover})`,
         }}
       >
+        <div
+          className={styles.cover}
+          style={{ backgroundImage: `url(${movie.cover})` }}
+        />
         <div className={styles.description}>
           <div className={styles.title}>{movie.title}</div>
           <div className={styles.year}>{movie.year}</div>
@@ -48,6 +72,6 @@ class Movie extends React.Component {
   }
 }
 
-module.exports = connect(({ movies }) => ({ movie: movies.movie }), {
-  fetchMovie: fetchMovieActionCreator,
+module.exports = connect(({ movies }) => ({ movie: movies.current }), {
+  dispatchFetchMovie: fetchMovieActionCreator,
 })(Movie);

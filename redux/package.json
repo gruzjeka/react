@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "concurrently \"webpack --watch --config webpack.config.js\" \"webpack-dev-server\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "concurrently \"webpack --watch --config webpack.config.js\" \"webpack --watch --config webpack.server.config.js\"",
+    "start": "nodemon ./build/server.js"
   },
   "author": "",
   "license": "ISC",
@@ -24,14 +24,22 @@
     "eslint-plugin-react": "5.2.2",
     "extract-text-webpack-plugin": "1.0.1",
     "json-loader": "0.5.4",
+    "nodemon": "1.10.0",
     "style-loader": "0.13.1",
     "webpack": "1.13.1",
     "webpack-dev-server": "1.14.1",
+    "axios": "0.13.1",
+    "clean-tagged-string": "0.0.1-b6",
     "react": "15.2.1",
     "react-dom": "15.2.1",
     "react-redux": "4.4.5",
     "react-router": "2.6.0",
-    "redux": "3.5.2",
-    "redux-actions": "0.10.1"
+    "redux": "3.5.2"
+  },
+  "dependencies": {
+    "express": "4.14.0",
+    "express-graphql": "0.5.3",
+    "graphql": "0.6.2",
+    "redux-actions": "^2.6.5"
   }
 }
